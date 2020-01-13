@@ -1,8 +1,6 @@
 const linebot = require("linebot");
 const { config, log } = require("./helpers");
 
-const { onReceiveText, onReceiveSticker, onReceiveImage, onReceiveVideo, onReceiveAudio } = require("./handleSendMsg");
-
 const bot = linebot({
     ...config.linebot
 });
@@ -27,6 +25,7 @@ async function replyMessage(param) {
     const { event } = param;
     const { message, source } = event;
     const { userId } = source;
+    let replyMsg = null;
 
     const previewUrl = "https://images.unsplash.com/photo-1578852500325-eac8ad217aca?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1950&q=80";
 
@@ -35,30 +34,35 @@ async function replyMessage(param) {
     switch (event.message.type) {
         case "text":
             const { text } = message;
-            onReceiveText(bot, userId, text);
+            replyMsg = msgbox.text(text);
             break;
         case "sticker":
             const { packageId, stickerId } = message;
-            onReceiveSticker(bot, userId, packageId, stickerId);
+            replyMsg = msgbox.sticker(packageId, stickerId);
             break;
         case "image":
             const imageBuff = await message.content();
             const imageBase64 = imageBuff.toString("base64"); // 轉換成 base64 的圖片，可以拿來發給 API
-            onReceiveImage(bot, userId, previewUrl, previewUrl);
+            replyMsg = msgbox.image(previewUrl, previewUrl);
             break;
         case "video":
             const videoBuff = await message.content();
             const videoBase64 = videoBuff.toString("base64"); // 轉換成 base64 的影片，可以拿來發給 API
             const replyVideo = "";
-            onReceiveVideo(bot, userId, replyVideo, previewUrl);
+            replyMsg = msgbox.video(replyVideo, previewUrl);
             break;
         case "audio":
             const audioBuff = await message.content();
             const audioBase64 = audioBuff.toString("base64");
             const replyAudio = "";
             const duration = message.duration;
-            onReceiveAudio(bot, userId, replyAudio, duration);
+            replyMsg = msgbox.audio(replyAudio, duration);
             break;
+    }
+
+    if (replyMsg) {
+        const res = await bot.push(userId, replyMsg).catch(error => { log(error); });
+        log("訊息已送出", replyMsg);
     }
 };
 // -------------------------------------------------------------
