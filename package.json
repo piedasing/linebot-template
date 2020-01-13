@@ -1,0 +1,23 @@
+{
+  "name": "linebot_template",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon -r dotenv/config ./index.js dotenv_config_path=./.env.dev",
+    "build": "nodemon -r dotenv/config ./index.js dotenv_config_path=./.env.prod"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "fs": "0.0.1-security",
+    "https": "^1.0.0",
+    "linebot": "^1.5.3",
+    "nodemon": "^1.19.1",
+    "request": "^2.88.0"
+  }
+}
