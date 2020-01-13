@@ -1,6 +1,5 @@
 const linebot = require("linebot");
-const config = require("./_config");
-const { log } = require("./_helpers");
+const { config, log } = require("./helpers");
 
 const bot = linebot({
     ...config.linebot

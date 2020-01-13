@@ -1,5 +1,4 @@
-const config = require("./_config");
-const { log } = require("./_helpers");
+const { config, log } = require("./helpers");
 const app = require("./app");
 
 const port = config.port;
